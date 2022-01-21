@@ -1,0 +1,19 @@
+/* Stylesheet */
+body {
+  margin: 0;
+}
+
+.plot-display {
+  position: absolute;
+  z-index: 10;
+  bottom: 0%;
+  right: 0%;
+  height: 400px;
+  width: 600px;
+  margin: auto;
+}
+
+.plot-btn {
+  z-index: 99;
+  display: none;
+}
