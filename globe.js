@@ -25,7 +25,7 @@
   }
 
   // Main code to fetch the json and transcribe it to points and interative features
-  fetch('./points-data/geo_bins_640_b.json').then(res => res.json()).then(oceans => {
+  fetch('./points-data/geo_bins_642.json').then(res => res.json()).then(oceans => {
       const ref = document.getElementById("globeViz");
       const world = Globe();
       world(ref)
