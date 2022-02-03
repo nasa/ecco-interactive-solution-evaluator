@@ -1,7 +1,25 @@
 {
   "dependencies": {
+    "express": "^4.17.2",
     "globe.gl": "^2.24.1",
     "plotly.js": "^2.8.3",
     "plotly.js-dist": "^2.8.3"
-  }
+  },
+  "name": "ecco-interactive-solution-evaluator",
+  "description": "ECCO Interactive Solution Evaluator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtroberts/ecco-interactive-solution-evaluator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jtroberts/ecco-interactive-solution-evaluator/issues"
+  },
+  "homepage": "https://github.com/jtroberts/ecco-interactive-solution-evaluator#readme"
 }
