@@ -1,6 +1,7 @@
 const express = require('express'); //Import the express dependency
 const Globe = require('globe.gl');
 const Plotly = require('plotly.js')
+const Colormap = require('colormap.js')
 const app = express();              //Instantiate an express app, the main work horse of this server
 const port = 5000;                  //Save the port number where your server will be listening
 
