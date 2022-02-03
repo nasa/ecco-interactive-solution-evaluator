@@ -1,19 +1,36 @@
-// Mock data for the plotly graph and creation
-var trace1 = {
-  x: [1, 2, 3, 4],
-  y: [10, 15, 13, 17],
+let plotData = [];
+let date = [];
+let up = [];
+let dn = [];
+
+d3.csv(
+  "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
+  function (data) {
+    date.push(data.Date);
+    up.push(data.up);
+    dn.push(data.dn);
+  }
+);
+
+let trace1 = {
   type: "scatter",
+  mode: "lines",
+  name: "AAPL High",
+  x: date,
+  y: up,
+  line: { color: "#17BECF" },
 };
 
-var trace2 = {
-  x: [1, 2, 3, 4],
-  y: [16, 5, 11, 9],
+let trace2 = {
   type: "scatter",
+  mode: "lines",
+  name: "AAPL Low",
+  x: date,
+  y: dn,
+  line: { color: "#7F7F7F" },
 };
 
-var data2 = [trace1, trace2];
-
-// console.log(evaluate_cmap);
+plotData = [trace1, trace2];
 
 // Function to randomize the y-axis data in the graphs upon each click and display a new graph
 function dataRandomizer() {
@@ -26,6 +43,31 @@ function dataRandomizer() {
   Plotly.newPlot("plotGraph", data2);
 }
 
+function average(trace) {
+  sum = 0;
+  for (let i = 0; i < trace.length; i++) {
+    sum += Number(trace[i]);
+  }
+  return sum / trace.length;
+}
+
+function averageGraph(trace) {
+  let averageTrace = {
+    type: "scatter",
+    mode: "lines",
+    name: "Average",
+    x: date,
+    y: [],
+    line: { color: "#17BECF" },
+  };
+  for (let i = 0; i < trace.length; i++) {
+    averageTrace.y.push(Number(trace[i]) - average(trace));
+  }
+
+  Plotly.newPlot("plotGraph", [averageTrace, trace2]);
+}
+
+//function to provide color mapping
 function colorMap(longitude) {
   colorScale = Math.abs(longitude) / 90;
   colorMapRGB = evaluate_cmap(colorScale, "PuBu", false);
@@ -59,5 +101,5 @@ function colorMap(longitude) {
     .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
     .hexSideColor(() => "#00000")
     .hexLabel((d) => `${d.points[0].properties.bin_id}`)
-    .onHexClick(() => dataRandomizer());
+    .onHexClick(() => Plotly.newPlot("plotGraph", plotData));
 })();
