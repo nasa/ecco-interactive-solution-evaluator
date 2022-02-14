@@ -40,7 +40,7 @@ function displayGraph(t1, t2) {
   trace1 = {
     type: "scatter",
     mode: "lines",
-    name: "AAPL High",
+    name: t1.name,
     x: date,
     y: t1.y,
     line: { color: "#17BECF" },
@@ -49,7 +49,7 @@ function displayGraph(t1, t2) {
   trace2 = {
     type: "scatter",
     mode: "lines",
-    name: "AAPL Low",
+    name: t2.name,
     x: date,
     y: t2.y,
     line: { color: "#7F7F7F" },
@@ -72,7 +72,7 @@ function averageGraph(trace1, trace2) {
   let averageTrace1 = {
     type: "scatter",
     mode: "lines",
-    name: "Average",
+    name: "Average APPL High",
     x: date,
     y: [],
     line: { color: "#17BECF" },
@@ -81,7 +81,7 @@ function averageGraph(trace1, trace2) {
   let averageTrace2 = {
     type: "scatter",
     mode: "lines",
-    name: "Average",
+    name: "Average APPL Low",
     x: date,
     y: [],
     line: { color: "#7F7F7F" },
@@ -95,6 +95,32 @@ function averageGraph(trace1, trace2) {
   }
 
   displayGraph(averageTrace1, averageTrace2);
+}
+
+function subtractGraph(trace1, trace2) {
+  let subtractTrace = {
+    type: "scatter",
+    mode: "lines",
+    name: "Subtraction",
+    x: date,
+    y: [],
+    line: { color: "#17BECF" },
+  };
+
+  let emptyTrace = {
+    type: "scatter",
+    mode: "lines",
+    name: "N/A",
+    x: date,
+    y: [],
+    line: { color: "#17BECF" },
+  };
+
+  for (let i = 0; i < trace1.length; i++) {
+    subtractTrace.y.push(Number(trace1[i] - trace2[i]));
+  }
+  console.log(subtractTrace.y);
+  displayGraph(subtractTrace, emptyTrace);
 }
 
 //function to provide color mapping
