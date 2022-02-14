@@ -33,31 +33,33 @@ function originalGraph() {
     line: { color: "#7F7F7F" },
   };
 
-  displayGraph(trace1, trace2);
-}
-
-function displayGraph(t1, t2) {
-  trace1 = {
-    type: "scatter",
-    mode: "lines",
-    name: t1.name,
-    x: date,
-    y: t1.y,
-    line: { color: "#17BECF" },
-  };
-
-  trace2 = {
-    type: "scatter",
-    mode: "lines",
-    name: t2.name,
-    x: date,
-    y: t2.y,
-    line: { color: "#7F7F7F" },
-  };
-
   plotData = [trace1, trace2];
 
-  Plotly.newPlot("plotGraph", plotData);
+  displayGraph(plotData);
+}
+
+function displayGraph(plotData) {
+  displayData = plotData;
+
+  // trace1 = {
+  //   type: "scatter",
+  //   mode: "lines",
+  //   name: t1.name,
+  //   x: date,
+  //   y: t1.y,
+  //   line: { color: "#17BECF" },
+  // };
+
+  // trace2 = {
+  //   type: "scatter",
+  //   mode: "lines",
+  //   name: t2.name,
+  //   x: date,
+  //   y: t2.y,
+  //   line: { color: "#7F7F7F" },
+  // };
+
+  Plotly.newPlot("plotGraph", displayData);
 }
 
 function average(trace) {
@@ -94,7 +96,9 @@ function averageGraph(trace1, trace2) {
     averageTrace2.y.push(Number(trace2[i]) - average(trace2));
   }
 
-  displayGraph(averageTrace1, averageTrace2);
+  averageData = [averageTrace1, averageTrace2];
+
+  displayGraph(averageData);
 }
 
 function subtractGraph(trace1, trace2) {
@@ -119,8 +123,8 @@ function subtractGraph(trace1, trace2) {
   for (let i = 0; i < trace1.length; i++) {
     subtractTrace.y.push(Number(trace1[i] - trace2[i]));
   }
-  console.log(subtractTrace.y);
-  displayGraph(subtractTrace, emptyTrace);
+  subtractData = [subtractTrace];
+  displayGraph(subtractData);
 }
 
 //function to provide color mapping
