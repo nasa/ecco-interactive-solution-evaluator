@@ -38,8 +38,8 @@ function originalGraph() {
   displayGraph(plotData);
 }
 
-function displayGraph(plotData) {
-  displayData = plotData;
+function displayGraph(dataArray) {
+  plotData = dataArray;
 
   // trace1 = {
   //   type: "scatter",
@@ -59,7 +59,7 @@ function displayGraph(plotData) {
   //   line: { color: "#7F7F7F" },
   // };
 
-  Plotly.newPlot("plotGraph", displayData);
+  Plotly.newPlot("plotGraph", plotData);
 }
 
 function average(trace) {
@@ -70,61 +70,128 @@ function average(trace) {
   return sum / trace.length;
 }
 
-function averageGraph(trace1, trace2) {
-  let averageTrace1 = {
-    type: "scatter",
-    mode: "lines",
-    name: "Average APPL High",
-    x: date,
-    y: [],
-    line: { color: "#17BECF" },
-  };
+function averageGraph(dataArray) {
+  plotData = dataArray;
 
-  let averageTrace2 = {
-    type: "scatter",
-    mode: "lines",
-    name: "Average APPL Low",
-    x: date,
-    y: [],
-    line: { color: "#7F7F7F" },
-  };
-  for (let i = 0; i < trace1.length; i++) {
-    averageTrace1.y.push(Number(trace1[i]) - average(trace1));
+  if (plotData.length >= 2) {
+    let averageTrace1 = {
+      type: "scatter",
+      mode: "lines",
+      name: "Average APPL High",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
+
+    let averageTrace2 = {
+      type: "scatter",
+      mode: "lines",
+      name: "Average APPL Low",
+      x: date,
+      y: [],
+      line: { color: "#7F7F7F" },
+    };
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      averageTrace1.y.push(Number(plotData[0].y[i]) - average(plotData[0].y));
+    }
+
+    for (let i = 0; i < plotData[1].y.length; i++) {
+      averageTrace2.y.push(Number(plotData[1].y[i]) - average(plotData[1].y));
+    }
+
+    plotData = [averageTrace1, averageTrace2];
+
+    displayGraph(plotData);
+  } else if (plotData.length < 2) {
+    let averageTrace1 = {
+      type: "scatter",
+      mode: "lines",
+      name: "Average APPL High",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
+
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      averageTrace1.y.push(Number(plotData[0].y[i]) - average(plotData[0].y));
+    }
+
+    plotData = [averageTrace1];
+
+    displayGraph(plotData);
   }
-
-  for (let i = 0; i < trace2.length; i++) {
-    averageTrace2.y.push(Number(trace2[i]) - average(trace2));
-  }
-
-  averageData = [averageTrace1, averageTrace2];
-
-  displayGraph(averageData);
 }
 
-function subtractGraph(trace1, trace2) {
-  let subtractTrace = {
-    type: "scatter",
-    mode: "lines",
-    name: "Subtraction",
-    x: date,
-    y: [],
-    line: { color: "#17BECF" },
-  };
+function subtractGraph(dataArray) {
+  plotData = dataArray;
+  if (plotData.length == 2) {
+    let subtractTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Subtraction",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
 
-  let emptyTrace = {
-    type: "scatter",
-    mode: "lines",
-    name: "N/A",
-    x: date,
-    y: [],
-    line: { color: "#17BECF" },
-  };
-
-  for (let i = 0; i < trace1.length; i++) {
-    subtractTrace.y.push(Number(trace1[i] - trace2[i]));
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      subtractTrace.y.push(Number(plotData[0].y[i] - plotData[1].y[i]));
+    }
+    plotData = [subtractTrace];
+    displayGraph(plotData);
+  } else {
+    console.log("You need atleast two traces!");
   }
-  subtractData = [subtractTrace];
-  displayGraph(subtractData);
+}
+
+function squareGraph(dataArray) {
+  plotData = dataArray;
+  if (plotData.length >= 2) {
+    let squareTrace1 = {
+      type: "scatter",
+      mode: "lines",
+      name: "Square APPL High",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
+
+    let squareTrace2 = {
+      type: "scatter",
+      mode: "lines",
+      name: "Square APPL Low",
+      x: date,
+      y: [],
+      line: { color: "#7F7F7F" },
+    };
+
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      squareTrace1.y.push(Math.pow(Number(plotData[0].y[i]), 2));
+    }
+
+    for (let i = 0; i < plotData[1].y.length; i++) {
+      squareTrace2.y.push(Math.pow(Number(plotData[1].y[i]), 2));
+    }
+
+    plotData = [squareTrace1, squareTrace2];
+    displayGraph(plotData);
+  } else if (plotData.length < 2) {
+    let squareTrace1 = {
+      type: "scatter",
+      mode: "lines",
+      name: "Square APPL High",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
+
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      squareTrace1.y.push(Math.pow(Number(plotData[0].y[i]), 2));
+    }
+
+    plotData = [squareTrace1];
+    displayGraph(plotData);
+  }
 }
 
 //function to provide color mapping
