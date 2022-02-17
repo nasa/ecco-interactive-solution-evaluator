@@ -1,3 +1,4 @@
+//Global Variable Creation
 let plotData = [];
 let date = [];
 let up = [];
@@ -5,6 +6,7 @@ let dn = [];
 let trace1 = {};
 let trace2 = {};
 
+//Retreiving APPL Stock CSV to load the graphs
 d3.csv(
   "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
   function (data) {
@@ -14,11 +16,13 @@ d3.csv(
   }
 );
 
+//Retrieves original graph
 function originalGraph() {
   trace1 = {
     type: "scatter",
     mode: "lines",
     name: "AAPL High",
+    dataClass: 0,
     x: date,
     y: up,
     line: { color: "#17BECF" },
@@ -28,40 +32,23 @@ function originalGraph() {
     type: "scatter",
     mode: "lines",
     name: "AAPL Low",
+    dataClass: 1,
     x: date,
     y: dn,
     line: { color: "#7F7F7F" },
   };
 
   plotData = [trace1, trace2];
-
   displayGraph(plotData);
 }
 
-function displayGraph(dataArray) {
-  plotData = dataArray;
-
-  // trace1 = {
-  //   type: "scatter",
-  //   mode: "lines",
-  //   name: t1.name,
-  //   x: date,
-  //   y: t1.y,
-  //   line: { color: "#17BECF" },
-  // };
-
-  // trace2 = {
-  //   type: "scatter",
-  //   mode: "lines",
-  //   name: t2.name,
-  //   x: date,
-  //   y: t2.y,
-  //   line: { color: "#7F7F7F" },
-  // };
-
+//Function to plot the data into the graphs
+function displayGraph(originalTraces) {
+  plotData = originalTraces;
   Plotly.newPlot("plotGraph", plotData);
 }
 
+//Simple function to produce an average of an array
 function average(trace) {
   sum = 0;
   for (let i = 0; i < trace.length; i++) {
@@ -70,58 +57,31 @@ function average(trace) {
   return sum / trace.length;
 }
 
-function averageGraph(dataArray) {
-  plotData = dataArray;
-
-  if (plotData.length >= 2) {
-    let averageTrace1 = {
+//Function to produce a graph displaying the average
+function averageGraph(originalTraces) {
+  averageTraces = [];
+  for (let i = 0; i < originalTraces.length; i++) {
+    let newTrace = {
       type: "scatter",
       mode: "lines",
-      name: "Average APPL High",
-      x: date,
+      name: "Average " + originalTraces[i].name,
+      x: originalTraces[i].date,
       y: [],
-      line: { color: "#17BECF" },
+      line: originalTraces[i].line,
     };
 
-    let averageTrace2 = {
-      type: "scatter",
-      mode: "lines",
-      name: "Average APPL Low",
-      x: date,
-      y: [],
-      line: { color: "#7F7F7F" },
-    };
-    for (let i = 0; i < plotData[0].y.length; i++) {
-      averageTrace1.y.push(Number(plotData[0].y[i]) - average(plotData[0].y));
+    for (let j = 0; j < originalTraces[i].y.length; j++) {
+      newTrace.y.push(
+        Number(originalTraces[i].y[j]) - average(originalTraces[i].y)
+      );
     }
-
-    for (let i = 0; i < plotData[1].y.length; i++) {
-      averageTrace2.y.push(Number(plotData[1].y[i]) - average(plotData[1].y));
-    }
-
-    plotData = [averageTrace1, averageTrace2];
-
-    displayGraph(plotData);
-  } else if (plotData.length < 2) {
-    let averageTrace1 = {
-      type: "scatter",
-      mode: "lines",
-      name: "Average APPL High",
-      x: date,
-      y: [],
-      line: { color: "#17BECF" },
-    };
-
-    for (let i = 0; i < plotData[0].y.length; i++) {
-      averageTrace1.y.push(Number(plotData[0].y[i]) - average(plotData[0].y));
-    }
-
-    plotData = [averageTrace1];
-
-    displayGraph(plotData);
+    averageTraces.push(newTrace);
   }
+  plotData = averageTraces;
+  displayGraph(plotData);
 }
 
+//Function to produce a graph displaying the subtraction between two traces
 function subtractGraph(dataArray) {
   plotData = dataArray;
   if (plotData.length == 2) {
@@ -144,54 +104,26 @@ function subtractGraph(dataArray) {
   }
 }
 
-function squareGraph(dataArray) {
-  plotData = dataArray;
-  if (plotData.length >= 2) {
-    let squareTrace1 = {
+//Function to square the current trace and display the graph
+function squareGraph(originalTraces) {
+  squareTraces = [];
+  for (let i = 0; i < originalTraces.length; i++) {
+    let newTrace = {
       type: "scatter",
       mode: "lines",
-      name: "Square APPL High",
-      x: date,
+      name: "Square " + originalTraces[i].name,
+      x: originalTraces[i].date,
       y: [],
-      line: { color: "#17BECF" },
+      line: originalTraces[i].line,
     };
 
-    let squareTrace2 = {
-      type: "scatter",
-      mode: "lines",
-      name: "Square APPL Low",
-      x: date,
-      y: [],
-      line: { color: "#7F7F7F" },
-    };
-
-    for (let i = 0; i < plotData[0].y.length; i++) {
-      squareTrace1.y.push(Math.pow(Number(plotData[0].y[i]), 2));
+    for (let j = 0; j < originalTraces[i].y.length; j++) {
+      newTrace.y.push(Math.pow(Number(originalTraces[i].y[j]), 2));
     }
-
-    for (let i = 0; i < plotData[1].y.length; i++) {
-      squareTrace2.y.push(Math.pow(Number(plotData[1].y[i]), 2));
-    }
-
-    plotData = [squareTrace1, squareTrace2];
-    displayGraph(plotData);
-  } else if (plotData.length < 2) {
-    let squareTrace1 = {
-      type: "scatter",
-      mode: "lines",
-      name: "Square APPL High",
-      x: date,
-      y: [],
-      line: { color: "#17BECF" },
-    };
-
-    for (let i = 0; i < plotData[0].y.length; i++) {
-      squareTrace1.y.push(Math.pow(Number(plotData[0].y[i]), 2));
-    }
-
-    plotData = [squareTrace1];
-    displayGraph(plotData);
+    squareTraces.push(newTrace);
   }
+  plotData = squareTraces;
+  displayGraph(squareTraces);
 }
 
 //function to provide color mapping
