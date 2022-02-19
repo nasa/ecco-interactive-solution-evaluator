@@ -13,10 +13,12 @@
     
     <!-- Main body of the html code and displays the globe -->
     <body>
-      <div> hello </div>
       <div id="globeViz"></div>
       <div id="plotGraph" class="plot-display"></div>
-      <button onclick="averageGraph(trace1.y)">Average Blue</button>
+      <button onclick="averageGraph(plotData)">Average</button>
+      <button onclick="subtractGraph(plotData)">Subtract</button>
+      <button onclick="squareGraph(plotData)">Square</button>
+      <button onclick="originalGraph()">Original</button>
     </body>
   </html>
   

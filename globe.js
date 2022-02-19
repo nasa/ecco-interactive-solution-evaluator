@@ -1,8 +1,12 @@
+//Global Variable Creation
 let plotData = [];
 let date = [];
 let up = [];
 let dn = [];
+let trace1 = {};
+let trace2 = {};
 
+//Retreiving APPL Stock CSV to load the graphs
 d3.csv(
   "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
   function (data) {
@@ -12,37 +16,39 @@ d3.csv(
   }
 );
 
-let trace1 = {
-  type: "scatter",
-  mode: "lines",
-  name: "AAPL High",
-  x: date,
-  y: up,
-  line: { color: "#17BECF" },
-};
+//Retrieves original graph
+function originalGraph() {
+  trace1 = {
+    type: "scatter",
+    mode: "lines",
+    name: "AAPL High",
+    dataClass: 0,
+    x: date,
+    y: up,
+    line: { color: "#17BECF" },
+  };
 
-let trace2 = {
-  type: "scatter",
-  mode: "lines",
-  name: "AAPL Low",
-  x: date,
-  y: dn,
-  line: { color: "#7F7F7F" },
-};
+  trace2 = {
+    type: "scatter",
+    mode: "lines",
+    name: "AAPL Low",
+    dataClass: 1,
+    x: date,
+    y: dn,
+    line: { color: "#7F7F7F" },
+  };
 
-plotData = [trace1, trace2];
-
-// Function to randomize the y-axis data in the graphs upon each click and display a new graph
-function dataRandomizer() {
-  trace1.y = [];
-  trace2.y = [];
-  for (let i = 0; i < 4; i++) {
-    trace1.y.push(Math.floor(Math.random() * 100));
-    trace2.y.push(Math.floor(Math.random() * 100));
-  }
-  Plotly.newPlot("plotGraph", data2);
+  plotData = [trace1, trace2];
+  displayGraph(plotData);
 }
 
+//Function to plot the data into the graphs
+function displayGraph(originalTraces) {
+  plotData = originalTraces;
+  Plotly.newPlot("plotGraph", plotData);
+}
+
+//Simple function to produce an average of an array
 function average(trace) {
   sum = 0;
   for (let i = 0; i < trace.length; i++) {
@@ -51,20 +57,73 @@ function average(trace) {
   return sum / trace.length;
 }
 
-function averageGraph(trace) {
-  let averageTrace = {
-    type: "scatter",
-    mode: "lines",
-    name: "Average",
-    x: date,
-    y: [],
-    line: { color: "#17BECF" },
-  };
-  for (let i = 0; i < trace.length; i++) {
-    averageTrace.y.push(Number(trace[i]) - average(trace));
-  }
+//Function to produce a graph displaying the average
+function averageGraph(originalTraces) {
+  averageTraces = [];
+  for (let i = 0; i < originalTraces.length; i++) {
+    let newTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Average " + originalTraces[i].name,
+      x: originalTraces[i].date,
+      y: [],
+      line: originalTraces[i].line,
+    };
 
-  Plotly.newPlot("plotGraph", [averageTrace, trace2]);
+    for (let j = 0; j < originalTraces[i].y.length; j++) {
+      newTrace.y.push(
+        Number(originalTraces[i].y[j]) - average(originalTraces[i].y)
+      );
+    }
+    averageTraces.push(newTrace);
+  }
+  plotData = averageTraces;
+  displayGraph(plotData);
+}
+
+//Function to produce a graph displaying the subtraction between two traces
+function subtractGraph(dataArray) {
+  plotData = dataArray;
+  if (plotData.length == 2) {
+    let subtractTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Subtraction",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
+
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      subtractTrace.y.push(Number(plotData[0].y[i] - plotData[1].y[i]));
+    }
+    plotData = [subtractTrace];
+    displayGraph(plotData);
+  } else {
+    console.log("You need atleast two traces!");
+  }
+}
+
+//Function to square the current trace and display the graph
+function squareGraph(originalTraces) {
+  squareTraces = [];
+  for (let i = 0; i < originalTraces.length; i++) {
+    let newTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Square " + originalTraces[i].name,
+      x: originalTraces[i].date,
+      y: [],
+      line: originalTraces[i].line,
+    };
+
+    for (let j = 0; j < originalTraces[i].y.length; j++) {
+      newTrace.y.push(Math.pow(Number(originalTraces[i].y[j]), 2));
+    }
+    squareTraces.push(newTrace);
+  }
+  plotData = squareTraces;
+  displayGraph(squareTraces);
 }
 
 //function to provide color mapping
@@ -101,5 +160,5 @@ function colorMap(longitude) {
     .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
     .hexSideColor(() => "#00000")
     .hexLabel((d) => `${d.points[0].properties.bin_id}`)
-    .onHexClick(() => Plotly.newPlot("plotGraph", plotData));
+    .onHexClick(() => originalGraph());
 })();
