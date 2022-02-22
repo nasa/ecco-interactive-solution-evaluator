@@ -1,10 +1,10 @@
 //Global Variable Creation
 let plotData = [];
 let date = [];
-let A = [];
-let B = [];
 let trace1 = {};
 let trace2 = {};
+let A = [];
+let B = [];
 
 //Retreiving APPL Stock CSV to load the graphs
 d3.csv(
@@ -14,20 +14,22 @@ d3.csv(
   }
 );
 
-function retrieveCSV(bin_id) {
+async function retrieveCSV(bin_id) {
   A = [];
   B = [];
-  d3.csv("./graph-data/A_" + bin_id + ".csv", function (data) {
-    A.push(data.Y);
-  });
-  d3.csv("./graph-data/B_" + bin_id + ".csv", function (data) {
-    B.push(data.Y);
-  });
+  const dataA = await d3.csv("./graph-data/A_" + bin_id + ".csv");
+  const dataB = await d3.csv("./graph-data/B_" + bin_id + ".csv");
+  for (let i = 0; i < dataA.length; i++) {
+    A.push(dataA[i].Y);
+    B.push(dataB[i].Y);
+  }
+  console.log(A);
   originalGraph();
 }
 
 //Retrieves original graph
 function originalGraph() {
+  console.log(A);
   trace1 = {
     type: "scatter",
     mode: "lines",
@@ -49,13 +51,14 @@ function originalGraph() {
   };
   console.log(A);
   plotData = [trace1, trace2];
+  console.log(plotData);
   displayGraph(plotData);
 }
 
 //Function to plot the data into the graphs
 function displayGraph(originalTraces) {
-  plotData = originalTraces;
-  Plotly.newPlot("plotGraph", plotData);
+  console.log(originalTraces);
+  Plotly.newPlot("plotGraph", originalTraces);
 }
 
 //Simple function to produce an average of an array

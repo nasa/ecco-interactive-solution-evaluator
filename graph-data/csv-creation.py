@@ -7,8 +7,8 @@ for i in range(642):
     bin = i+1
 
     for i in range(506):
-        a.append(random.randint(0,100))
-        b.append(random.randint(0,100))
+        a.append(random.randint(50,100))
+        b.append(random.randint(0,50))
 
     dictA = {'Y': a}
     dictB = {'Y': b}
