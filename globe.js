@@ -1,30 +1,42 @@
 //Global Variable Creation
 let plotData = [];
 let date = [];
-let up = [];
-let dn = [];
 let trace1 = {};
 let trace2 = {};
+let A = [];
+let B = [];
 
 //Retreiving APPL Stock CSV to load the graphs
 d3.csv(
   "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
   function (data) {
     date.push(data.Date);
-    up.push(data.up);
-    dn.push(data.dn);
   }
 );
 
+async function retrieveCSV(bin_id) {
+  A = [];
+  B = [];
+  const dataA = await d3.csv("./graph-data/A_" + bin_id + ".csv");
+  const dataB = await d3.csv("./graph-data/B_" + bin_id + ".csv");
+  for (let i = 0; i < dataA.length; i++) {
+    A.push(dataA[i].Y);
+    B.push(dataB[i].Y);
+  }
+  console.log(A);
+  originalGraph();
+}
+
 //Retrieves original graph
 function originalGraph() {
+  console.log(A);
   trace1 = {
     type: "scatter",
     mode: "lines",
     name: "AAPL High",
     dataClass: 0,
     x: date,
-    y: up,
+    y: A,
     line: { color: "#17BECF" },
   };
 
@@ -34,18 +46,19 @@ function originalGraph() {
     name: "AAPL Low",
     dataClass: 1,
     x: date,
-    y: dn,
+    y: B,
     line: { color: "#7F7F7F" },
   };
-
+  console.log(A);
   plotData = [trace1, trace2];
+  console.log(plotData);
   displayGraph(plotData);
 }
 
 //Function to plot the data into the graphs
 function displayGraph(originalTraces) {
-  plotData = originalTraces;
-  Plotly.newPlot("plotGraph", plotData);
+  console.log(originalTraces);
+  Plotly.newPlot("plotGraph", originalTraces);
 }
 
 //Simple function to produce an average of an array
@@ -160,5 +173,5 @@ function colorMap(longitude) {
     .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
     .hexSideColor(() => "#00000")
     .hexLabel((d) => `${d.points[0].properties.bin_id}`)
-    .onHexClick(() => originalGraph());
+    .onHexClick((d) => retrieveCSV(d.points[0].properties.bin_id));
 })();
