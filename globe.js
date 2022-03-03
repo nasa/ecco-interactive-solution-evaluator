@@ -1,42 +1,164 @@
-  // Mock data for the plotly graph and creation
-  var trace1 = {
-    x: [1, 2, 3, 4],
-    y: [10, 15, 13, 17],
-    type: 'scatter'
-  };
-  
-  var trace2 = {
-    x: [1, 2, 3, 4],
-    y: [16, 5, 11, 9],
-    type: 'scatter'
-  };
-  
-  var data = [trace1, trace2];
+//Global Variable Creation
+let plotData = [];
+let date = [];
+let up = [];
+let dn = [];
+let trace1 = {};
+let trace2 = {};
 
-  // Function to randomize the y-axis data in the graphs upon each click and display a new graph
-  function dataRandomizer(){
-    trace1.y = []
-    trace2.y = []
-    for(let i = 0; i < 4; i++){
-      trace1.y.push(Math.floor(Math.random()*100));
-      trace2.y.push(Math.floor(Math.random()*100));
+//Retreiving APPL Stock CSV to load the graphs
+d3.csv(
+  "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
+  function (data) {
+    date.push(data.Date);
+    up.push(data.up);
+    dn.push(data.dn);
+  }
+);
+
+//Retrieves original graph
+function originalGraph() {
+  trace1 = {
+    type: "scatter",
+    mode: "lines",
+    name: "AAPL High",
+    dataClass: 0,
+    x: date,
+    y: up,
+    line: { color: "#17BECF" },
+  };
+
+  trace2 = {
+    type: "scatter",
+    mode: "lines",
+    name: "AAPL Low",
+    dataClass: 1,
+    x: date,
+    y: dn,
+    line: { color: "#7F7F7F" },
+  };
+
+  plotData = [trace1, trace2];
+  displayGraph(plotData);
+}
+
+//Function to plot the data into the graphs
+function displayGraph(originalTraces) {
+  plotData = originalTraces;
+  Plotly.newPlot("plotGraph", plotData);
+}
+
+//Simple function to produce an average of an array
+function average(trace) {
+  sum = 0;
+  for (let i = 0; i < trace.length; i++) {
+    sum += Number(trace[i]);
+  }
+  return sum / trace.length;
+}
+
+//Function to produce a graph displaying the average
+function averageGraph(originalTraces) {
+  averageTraces = [];
+  for (let i = 0; i < originalTraces.length; i++) {
+    let newTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Average " + originalTraces[i].name,
+      x: originalTraces[i].date,
+      y: [],
+      line: originalTraces[i].line,
+    };
+
+    for (let j = 0; j < originalTraces[i].y.length; j++) {
+      newTrace.y.push(
+        Number(originalTraces[i].y[j]) - average(originalTraces[i].y)
+      );
     }
-    Plotly.newPlot('plotGraph', data)
+    averageTraces.push(newTrace);
+  }
+  plotData = averageTraces;
+  displayGraph(plotData);
+}
+
+//Function to produce a graph displaying the subtraction between two traces
+function subtractGraph(dataArray) {
+  plotData = dataArray;
+  if (plotData.length == 2) {
+    let subtractTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Subtraction",
+      x: date,
+      y: [],
+      line: { color: "#17BECF" },
+    };
+
+    for (let i = 0; i < plotData[0].y.length; i++) {
+      subtractTrace.y.push(Number(plotData[0].y[i] - plotData[1].y[i]));
+    }
+    plotData = [subtractTrace];
+    displayGraph(plotData);
+  } else {
+    console.log("You need atleast two traces!");
+  }
+}
+
+//Function to square the current trace and display the graph
+function squareGraph(originalTraces) {
+  squareTraces = [];
+  for (let i = 0; i < originalTraces.length; i++) {
+    let newTrace = {
+      type: "scatter",
+      mode: "lines",
+      name: "Square " + originalTraces[i].name,
+      x: originalTraces[i].date,
+      y: [],
+      line: originalTraces[i].line,
+    };
+
+    for (let j = 0; j < originalTraces[i].y.length; j++) {
+      newTrace.y.push(Math.pow(Number(originalTraces[i].y[j]), 2));
+    }
+    squareTraces.push(newTrace);
+  }
+  plotData = squareTraces;
+  displayGraph(squareTraces);
+}
+
+//function to provide color mapping
+function colorMap(longitude) {
+  colorScale = Math.abs(longitude) / 90;
+  colorMapRGB = evaluate_cmap(colorScale, "PuBu", false);
+
+  function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
   }
 
+  function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  }
+
+  return rgbToHex(colorMapRGB[0], colorMapRGB[1], colorMapRGB[2]);
+}
+
+(async function () {
   // Main code to fetch the json and transcribe it to points and interative features
-  fetch('./points-data/geo_bins_642.json').then(res => res.json()).then(oceans => {
-      const ref = document.getElementById("globeViz");
-      const world = Globe();
-      world(ref)
-        .globeImageUrl('./earth.png')
-        .hexBinPointsData(oceans.features)
-        .hexBinPointLat(d => d.geometry.coordinates[1])
-        .hexBinPointLng(d => d.geometry.coordinates[0])
-        .hexAltitude(0.01)
-        .hexBinResolution(2)
-        .hexTopColor(() => ('#051094'))
-        .hexSideColor(() => ('#00000'))
-        .hexLabel(d => `${d.points[0].properties.bin_id}`)
-        .onHexClick(() => dataRandomizer())
-      });
+  const points = await fetch("./points-data/geo_bins_642.json");
+  const oceans = await points.json();
+  const world = Globe();
+  const ref = document.getElementById("globeViz");
+  world(ref)
+    .globeImageUrl("./earth.png")
+    .hexBinPointsData(oceans.features)
+    .hexBinPointLat((d) => d.geometry.coordinates[1])
+    .hexBinPointLng((d) => d.geometry.coordinates[0])
+    .hexAltitude(0.001)
+    .hexBinResolution(2)
+    .hexMargin(0.1)
+    .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
+    .hexSideColor(() => "#00000")
+    .hexLabel((d) => `${d.points[0].properties.bin_id}`)
+    .onHexClick(() => originalGraph());
+})();
