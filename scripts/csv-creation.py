@@ -14,7 +14,7 @@ for i in range(642):
     dictB = {'Y': b}
 
     dfA = pd.DataFrame(dictA)
-    dfA.to_csv(r'./A_' + str(bin) +'.csv', index=False)
+    dfA.to_csv(r'./graph-data/A_' + str(bin) +'.csv', index=False)
 
     dfB = pd.DataFrame(dictB)
-    dfB.to_csv(r'./B_' + str(bin) +'.csv', index=False)
+    dfB.to_csv(r'./graph-data/B_' + str(bin) +'.csv', index=False)
