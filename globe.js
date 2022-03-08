@@ -57,7 +57,7 @@ function originalGraph() {
 
 //Function to plot the data into the graphs
 function displayGraph(originalTraces) {
-  console.log(originalTraces);
+  document.getElementById("plotButtonContainer").style.visibility = "visible";
   Plotly.newPlot("plotGraph", originalTraces);
 }
 
