@@ -17,14 +17,22 @@
     <!-- Main body of the html code and displays the globe -->
     <body>
       <div id="plotNav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">Ocean Temperature</a>
+        <h2 class="sidenav-title">Data</h2>
+        <ion-icon name="close-outline" class="closebtn" onclick="closeNav('plotNav')"></ion-icon>
+        <a href="#" onclick='openNav("tempNav")'>Ocean Temperature</a>
         <a href="#">Salinity</a>
         <a href="#">Sea Ice Velocity</a>
         <a href="#">Surface Atmosphere</a>
       </div>
       
-      <ion-icon name="list-outline" onclick='openNav()' class='nav-btn' id="navButton"></ion-icon>
+      <div id="tempNav" class="sidenav">
+        <h2 class="sidenav-title">Ocean Temperature</h2>
+        <ion-icon name="close-outline" class="closebtn" onclick="closeNav('tempNav')"></ion-icon>
+        <a href="#">Temperature1</a>
+        <a href="#">Temperature2</a>
+      </div>
+
+      <ion-icon name="list-outline" onclick='openNav("plotNav")' class='nav-btn' id="navButton"></ion-icon>
       <div id="globeViz"></div>
       <div id="plotGraph" class="plot-display">
         <div class="plotButton-display" id="plotButtonContainer">

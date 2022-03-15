@@ -47,6 +47,15 @@ body {
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+.sidenav-title {
+  color: white;
+  position: absolute;
+  top: 2%;
+  left: 3%;
+  z-index: 2;
+  margin-bottom: auto;
+}
+
 /* The navigation menu links */
 .sidenav a {
   padding: 8px 8px 8px 32px;
@@ -69,6 +78,12 @@ body {
   top: 0;
   right: 1%;
   font-size: 30px;
+  color: #818181;
+}
+
+.sidenav .closebtn:hover {
+  color: #f1f1f1;
+  background-color: #383838;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -87,8 +102,8 @@ body {
     z-index: 10;
     bottom: 0%;
     right: 0%;
-    height: 300px;
-    width: 500px;
+    height: 400px;
+    width: 475px;
     margin: auto;
   }
 }
