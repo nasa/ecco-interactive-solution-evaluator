@@ -164,14 +164,22 @@ function colorMap(longitude) {
   const ref = document.getElementById("globeViz");
   world(ref)
     .globeImageUrl("./earth.png")
-    .hexBinPointsData(oceans.features)
-    .hexBinPointLat((d) => d.geometry.coordinates[1])
-    .hexBinPointLng((d) => d.geometry.coordinates[0])
-    .hexAltitude(0.001)
-    .hexBinResolution(2)
-    .hexMargin(0.1)
-    .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
-    .hexSideColor(() => "#00000")
-    .hexLabel((d) => `${d.points[0].properties.bin_id}`)
-    .onHexClick((d) => retrieveCSV(d.points[0].properties.bin_id));
+    // .hexBinPointsData(oceans.features)
+    // .hexBinPointLat((d) => d.geometry.coordinates[1])
+    // .hexBinPointLng((d) => d.geometry.coordinates[0])
+    // .hexAltitude(0.001)
+    // .hexBinResolution(3)
+    // .hexMargin(0.1)
+    // .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
+    // .hexSideColor(() => "#00000")
+    // .hexLabel((d) => `${d.points[0].properties.bin_id}`)
+    // .onHexClick((d) => retrieveCSV(d.points[0].properties.bin_id));
+    .pointsData(oceans.features)
+    .pointLat((d) => d.geometry.coordinates[1])
+    .pointLng((d) => d.geometry.coordinates[0])
+    .pointLabel((d) => `${d.properties.bin_id}`)
+    .pointColor((d) => colorMap(d.geometry.coordinates[1]))
+    .pointAltitude(0.001)
+    .pointRadius(1.25)
+    .onPointClick((d) => retrieveCSV(d.properties.bin_id));
 })();
