@@ -28,13 +28,17 @@
       <div id="tempNav" class="sidenav">
         <h2 class="sidenav-title">Ocean Temperature</h2>
         <ion-icon name="close-outline" class="closebtn" onclick="closeNav('tempNav')"></ion-icon>
-        <a href="#">Temperature1</a>
-        <a href="#">Temperature2</a>
+        <a href="#" onclick="retrieveCSV('Temperature1', bin_id)">Temperature1</a>
+        <a href="#" onclick="retrieveCSV('Temperature2', bin_id)">Temperature2</a>
       </div>
 
       <ion-icon name="list-outline" onclick='openNav("plotNav")' class='nav-btn' id="navButton"></ion-icon>
       <div id="globeViz"></div>
-      <div id="plotGraph" class="plot-display">
+      <div id="plot-container">
+        <div id="plotGraph" class="plot-display">
+          <ion-icon name="arrow-forward-outline" id='plot-closebtn' class="closebtn" onclick="closePlot('plotGraph')"></ion-icon>
+          <ion-icon name="arrow-back-outline" id='plot-openbtn' class="openbtn" onclick="openPlot('plotGraph')"></ion-icon>
+        </div>
         <div class="plotButton-display" id="plotButtonContainer">
           <button onclick="averageGraph(plotData)">Average</button>
           <button onclick="subtractGraph(plotData)">Subtract</button>

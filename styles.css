@@ -6,7 +6,7 @@ body {
 .plot-display {
   position: absolute;
   z-index: 10;
-  bottom: 0%;
+  bottom: 5%;
   right: 0%;
   height: 400px;
   width: 600px;
@@ -17,8 +17,37 @@ body {
   position: absolute;
   z-index: 1;
   bottom: 0.5%;
-  left: 0.5%;
+  right: 0.5%;
   visibility: hidden;
+}
+
+.plot-display .closebtn {
+  position: absolute;
+  top: 0.5%;
+  left: 0.5%;
+  z-index: 1;
+  font-size: 30px;
+  visibility: hidden;
+}
+
+.plot-display .openbtn {
+  position: absolute;
+  top: 0.5%;
+  right: 0.5%;
+  z-index: 1;
+  font-size: 30px;
+  color: #ffffff;
+  visibility: hidden;
+}
+
+.plot-display .closebtn:hover {
+  color: #ffffff;
+  background-color: #5f5f5f;
+}
+
+.plot-display .openbtn:hover {
+  color: #f1f1f1;
+  background-color: #383838;
 }
 
 .nav-btn {
@@ -100,7 +129,7 @@ body {
   .plot-display {
     position: absolute;
     z-index: 10;
-    bottom: 0%;
+    bottom: 5%;
     right: 0%;
     height: 400px;
     width: 475px;

@@ -104,4 +104,4 @@ dist
 .tern-port
 
 .DS_Store
-.graph-data
+.graph-data/

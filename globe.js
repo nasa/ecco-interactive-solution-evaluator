@@ -3,37 +3,58 @@ let plotData = [];
 let date = [];
 let trace1 = {};
 let trace2 = {};
+let layout = {};
 let A = [];
 let B = [];
+let measurement = "";
+let bin_id = -1;
+let dataset = "";
 
 //Retreiving APPL Stock CSV to load the graphs
-d3.csv(
-  "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
-  function (data) {
-    date.push(data.Date);
-  }
-);
+// d3.csv(
+//   "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
+//   function (data) {
+//     date.push(data.Date);
+//   }
+// );
 
-async function retrieveCSV(bin_id) {
-  A = [];
-  B = [];
-  const dataA = await d3.csv("./graph-data/A_" + bin_id + ".csv");
-  const dataB = await d3.csv("./graph-data/B_" + bin_id + ".csv");
-  for (let i = 0; i < dataA.length; i++) {
-    A.push(dataA[i].Y);
-    B.push(dataB[i].Y);
+async function retrieveCSV(currDataset, currBin_id) {
+  if (currBin_id == -1) {
+    console.log("Please select a bin");
+    dataset = currDataset;
+  } else if (currDataset == "") {
+    console.log("Please select a dataset");
+    bin_id = currBin_id;
+  } else if (currBin_id != -1 && currDataset != "") {
+    console.log("hello!");
+    bin_id = currBin_id;
+    dataset = currDataset;
+
+    A = [];
+    B = [];
+    date = [];
+    const dataA = await d3.csv(
+      "./graph-data/" + dataset + "/Model/" + bin_id + ".csv"
+    );
+    const dataB = await d3.csv(
+      "./graph-data/" + dataset + "/Observed/" + bin_id + ".csv"
+    );
+    measurement = dataA.columns[2];
+    for (let i = 0; i < dataA.length; i++) {
+      A.push(dataA[i][measurement]);
+      B.push(dataB[i][measurement]);
+      date.push(dataA[i].Time);
+    }
+    originalGraph();
   }
-  console.log(A);
-  originalGraph();
 }
 
 //Retrieves original graph
 function originalGraph() {
-  console.log(A);
   trace1 = {
     type: "scatter",
     mode: "lines",
-    name: "AAPL High",
+    name: measurement + " Model",
     dataClass: 0,
     x: date,
     y: A,
@@ -43,22 +64,52 @@ function originalGraph() {
   trace2 = {
     type: "scatter",
     mode: "lines",
-    name: "AAPL Low",
+    name: measurement + " Observed",
     dataClass: 1,
     x: date,
     y: B,
     line: { color: "#7F7F7F" },
   };
-  console.log(A);
   plotData = [trace1, trace2];
-  console.log(plotData);
-  displayGraph(plotData);
+  layout = {
+    title: {
+      text: dataset + " " + bin_id,
+      font: {
+        family: "Courier New, monospace",
+        size: 24,
+      },
+      xref: "paper",
+      x: 0.05,
+    },
+    xaxis: {
+      title: {
+        text: "Date",
+        font: {
+          family: "Courier New, monospace",
+          size: 18,
+          color: "#7f7f7f",
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: measurement,
+        font: {
+          family: "Courier New, monospace",
+          size: 18,
+          color: "#7f7f7f",
+        },
+      },
+    },
+  };
+
+  displayGraph(plotData, layout);
 }
 
 //Function to plot the data into the graphs
-function displayGraph(originalTraces) {
-  document.getElementById("plotButtonContainer").style.visibility = "visible";
-  Plotly.newPlot("plotGraph", originalTraces);
+function displayGraph(originalTraces, graphLayout) {
+  openPlot("plotGraph");
+  Plotly.newPlot("plotGraph", originalTraces, graphLayout);
 }
 
 //Simple function to produce an average of an array
@@ -78,7 +129,7 @@ function averageGraph(originalTraces) {
       type: "scatter",
       mode: "lines",
       name: "Average " + originalTraces[i].name,
-      x: originalTraces[i].date,
+      x: date,
       y: [],
       line: originalTraces[i].line,
     };
@@ -91,30 +142,30 @@ function averageGraph(originalTraces) {
     averageTraces.push(newTrace);
   }
   plotData = averageTraces;
-  displayGraph(plotData);
+  displayGraph(plotData, layout);
 }
 
 //Function to produce a graph displaying the subtraction between two traces
 function subtractGraph(dataArray) {
   plotData = dataArray;
+  let subtractTrace = {
+    type: "scatter",
+    mode: "lines",
+    name: "Subtract" + " " + measurement,
+    x: date,
+    y: [],
+    line: { color: "#17BECF" },
+  };
   if (plotData.length == 2) {
-    let subtractTrace = {
-      type: "scatter",
-      mode: "lines",
-      name: "Subtraction",
-      x: date,
-      y: [],
-      line: { color: "#17BECF" },
-    };
-
     for (let i = 0; i < plotData[0].y.length; i++) {
       subtractTrace.y.push(Number(plotData[0].y[i] - plotData[1].y[i]));
     }
     plotData = [subtractTrace];
-    displayGraph(plotData);
+    displayGraph(plotData, layout);
   } else {
     console.log("You need atleast two traces!");
   }
+  console.log(plotData);
 }
 
 //Function to square the current trace and display the graph
@@ -125,7 +176,7 @@ function squareGraph(originalTraces) {
       type: "scatter",
       mode: "lines",
       name: "Square " + originalTraces[i].name,
-      x: originalTraces[i].date,
+      x: date,
       y: [],
       line: originalTraces[i].line,
     };
@@ -136,7 +187,8 @@ function squareGraph(originalTraces) {
     squareTraces.push(newTrace);
   }
   plotData = squareTraces;
-  displayGraph(squareTraces);
+  displayGraph(squareTraces, layout);
+  console.log(plotData);
 }
 
 //function to provide color mapping
@@ -180,6 +232,6 @@ function colorMap(longitude) {
     .pointLabel((d) => `${d.properties.bin_id}`)
     .pointColor((d) => colorMap(d.geometry.coordinates[1]))
     .pointAltitude(0.001)
-    .pointRadius(1.25)
-    .onPointClick((d) => retrieveCSV(d.properties.bin_id));
+    .pointRadius(1)
+    .onPointClick((d) => retrieveCSV(dataset, d.properties.bin_id));
 })();
