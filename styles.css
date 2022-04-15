@@ -11,8 +11,8 @@ body {
 .img-logo-container {
   position: absolute;
   z-index: 1;
-  right: 20%;
-  top: 0%;
+  right: 9%;
+  top: 1%;
   height: 200px;
   width: 400px;
 }
@@ -24,6 +24,7 @@ body {
   right: 1%;
   top: 1%;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
 }
 
 .plot-display {
