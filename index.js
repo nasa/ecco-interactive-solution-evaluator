@@ -17,8 +17,8 @@ function closePlot(id) {
 function openPlot(id) {
   let screen = window.matchMedia("(max-height: 800px)");
   if (screen.matches) {
-    document.getElementById(id).style.width = "475px";
-    document.getElementById(id).style.height = "400px";
+    document.getElementById(id).style.width = "1100px";
+    document.getElementById(id).style.height = "600px";
   } else {
     document.getElementById(id).style.width = "600px";
     document.getElementById(id).style.height = "400px";

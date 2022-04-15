@@ -16,10 +16,18 @@
     
     <!-- Main body of the html code and displays the globe -->
     <body>
+      <div>
+        <div id="imgLogo" class="img-logo-container">
+          <img src="assets/Tribrand_Logo.png" class="img-logo">
+        </div>
+        <div class="text-logo-container">
+          <h1>ECCO-Interactive-Solution-Evaluator</h1>
+        </div>
+      </div>
       <div id="plotNav" class="sidenav">
         <h2 class="sidenav-title">Data</h2>
         <ion-icon name="close-outline" class="closebtn" onclick="closeNav('plotNav')"></ion-icon>
-        <a href="#" onclick='openNav("tempNav")'>Ocean Temperature</a>
+        <a href="#" onclick="openNav('tempNav'); retrieveCategory('Temperature')">Ocean Temperature</a>
         <a href="#">Salinity</a>
         <a href="#">Sea Ice Velocity</a>
         <a href="#">Surface Atmosphere</a>

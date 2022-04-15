@@ -9,6 +9,7 @@ let B = [];
 let measurement = "";
 let bin_id = -1;
 let dataset = "";
+let category = "";
 
 //Retreiving APPL Stock CSV to load the graphs
 // d3.csv(
@@ -18,15 +19,18 @@ let dataset = "";
 //   }
 // );
 
+function retrieveCategory(currCategory) {
+  category = currCategory;
+}
+
 async function retrieveCSV(currDataset, currBin_id) {
   if (currBin_id == -1) {
-    console.log("Please select a bin");
+    alert("Please select a bin");
     dataset = currDataset;
   } else if (currDataset == "") {
-    console.log("Please select a dataset");
+    alert("Please select a dataset");
     bin_id = currBin_id;
   } else if (currBin_id != -1 && currDataset != "") {
-    console.log("hello!");
     bin_id = currBin_id;
     dataset = currDataset;
 
@@ -34,10 +38,16 @@ async function retrieveCSV(currDataset, currBin_id) {
     B = [];
     date = [];
     const dataA = await d3.csv(
-      "./graph-data/" + dataset + "/Model/" + bin_id + ".csv"
+      "./graph-data/" + category + "/" + dataset + "/Model/" + bin_id + ".csv"
     );
     const dataB = await d3.csv(
-      "./graph-data/" + dataset + "/Observed/" + bin_id + ".csv"
+      "./graph-data/" +
+        category +
+        "/" +
+        dataset +
+        "/Observed/" +
+        bin_id +
+        ".csv"
     );
     measurement = dataA.columns[2];
     for (let i = 0; i < dataA.length; i++) {
@@ -163,7 +173,7 @@ function subtractGraph(dataArray) {
     plotData = [subtractTrace];
     displayGraph(plotData, layout);
   } else {
-    console.log("You need atleast two traces!");
+    alert("You need atleast two traces!");
   }
   console.log(plotData);
 }
@@ -196,16 +206,16 @@ function colorMap(longitude) {
   colorScale = Math.abs(longitude) / 90;
   colorMapRGB = evaluate_cmap(colorScale, "PuBu", false);
 
-  function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-  }
-
-  function rgbToHex(r, g, b) {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-  }
-
   return rgbToHex(colorMapRGB[0], colorMapRGB[1], colorMapRGB[2]);
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
 (async function () {
@@ -215,7 +225,7 @@ function colorMap(longitude) {
   const world = Globe();
   const ref = document.getElementById("globeViz");
   world(ref)
-    .globeImageUrl("./earth.png")
+    .globeImageUrl("./assets/earth.png")
     // .hexBinPointsData(oceans.features)
     // .hexBinPointLat((d) => d.geometry.coordinates[1])
     // .hexBinPointLng((d) => d.geometry.coordinates[0])
@@ -233,5 +243,13 @@ function colorMap(longitude) {
     .pointColor((d) => colorMap(d.geometry.coordinates[1]))
     .pointAltitude(0.001)
     .pointRadius(1)
+    // .onPointClick(emitColor);
     .onPointClick((d) => retrieveCSV(dataset, d.properties.bin_id));
+
+  function emitColor(point, event, { lat, lng, altitude }) {
+    console.log(point);
+    point.__threeObj.material.color.r = 0;
+    point.__threeObj.material.color.b = 0;
+    point.__threeObj.material.color.g = 0;
+  }
 })();

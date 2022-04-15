@@ -3,12 +3,35 @@ body {
   margin: 0;
 }
 
+.img-logo {
+  max-width: 50%;
+  max-height: 50%;
+}
+
+.img-logo-container {
+  position: absolute;
+  z-index: 1;
+  right: 20%;
+  top: 0%;
+  height: 200px;
+  width: 400px;
+}
+
+.text-logo-container {
+  position: absolute;
+  color: white;
+  z-index: 1;
+  right: 1%;
+  top: 1%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .plot-display {
   position: absolute;
   z-index: 10;
   bottom: 5%;
   right: 0%;
-  height: 400px;
+  height: 600px;
   width: 600px;
   margin: auto;
 }
@@ -131,8 +154,32 @@ body {
     z-index: 10;
     bottom: 5%;
     right: 0%;
-    height: 400px;
-    width: 475px;
+    height: 600px;
+    width: 1100px;
     margin: auto;
+  }
+
+  .img-logo {
+    max-width: 50%;
+    max-height: 50%;
+  }
+
+  .img-logo-container {
+    position: absolute;
+    z-index: 1;
+    right: 15%;
+    top: 2%;
+    height: 200px;
+    width: 300px;
+  }
+
+  .text-logo-container {
+    position: absolute;
+    color: white;
+    z-index: 1;
+    right: 1%;
+    top: 1%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
   }
 }
