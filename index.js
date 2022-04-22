@@ -1,16 +1,29 @@
-const express = require('express'); //Import the express dependency
-const Globe = require('globe.gl');
-const Plotly = require('plotly.js')
-const Colormap = require('colormap.js')
-const app = express();              //Instantiate an express app, the main work horse of this server
-const port = 5000;                  //Save the port number where your server will be listening
+/* Set the width of the side navigation to 250px */
+function openNav(id) {
+  document.getElementById(id).style.width = "250px";
+}
 
-//Idiomatic expression in express to route and respond to a client request
-app.get('/', (req, res) => {        //get requests to the root ("/") will route here
-    res.sendFile('index.html', {root: __dirname});      //server responds by sending the index.html file to the client's browser
-                                                        //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile 
-});
+/* Set the width of the side navigation to 0 */
+function closeNav(id) {
+  document.getElementById(id).style.width = "0";
+}
 
-app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
-    console.log(`Now listening on port ${port}`); 
-});
+function closePlot(id) {
+  document.getElementById(id).style.width = "0";
+  document.getElementById("plotButtonContainer").style.visibility = "hidden";
+  document.getElementById("plot-openbtn").style.visibility = "visible";
+}
+
+function openPlot(id) {
+  let screen = window.matchMedia("(max-height: 800px)");
+  if (screen.matches) {
+    document.getElementById(id).style.width = "1170px";
+    document.getElementById(id).style.height = "600px";
+  } else {
+    document.getElementById(id).style.width = "1500px";
+    document.getElementById(id).style.height = "800px";
+  }
+  document.getElementById("plotButtonContainer").style.visibility = "visible";
+  document.getElementById("plot-closebtn").style.visibility = "visible";
+  document.getElementById("plot-openbtn").style.visibility = "hidden";
+}

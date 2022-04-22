@@ -3,17 +3,184 @@ body {
   margin: 0;
 }
 
+.img-logo {
+  max-width: 50%;
+  max-height: 50%;
+}
+
+.img-logo-container {
+  position: absolute;
+  z-index: 1;
+  right: 9%;
+  top: 1%;
+  height: 200px;
+  width: 400px;
+}
+
+.text-logo-container {
+  position: absolute;
+  color: white;
+  z-index: 1;
+  right: 1%;
+  top: 1%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+}
+
 .plot-display {
   position: absolute;
   z-index: 10;
-  bottom: 0%;
+  bottom: 5%;
   right: 0%;
-  height: 400px;
-  width: 600px;
+  height: 0px;
+  width: 0px;
   margin: auto;
 }
 
-.plot-btn {
-  z-index: 99;
-  display: none;
+.plotButton-display {
+  position: absolute;
+  z-index: 1;
+  bottom: 0.5%;
+  right: 0.5%;
+  visibility: hidden;
+}
+
+.plot-display .closebtn {
+  position: absolute;
+  top: 0.5%;
+  left: 0.5%;
+  z-index: 1;
+  font-size: 30px;
+  visibility: hidden;
+}
+
+.plot-display .openbtn {
+  position: absolute;
+  top: 0.5%;
+  right: 0.5%;
+  z-index: 1;
+  font-size: 30px;
+  color: #ffffff;
+  visibility: hidden;
+}
+
+.plot-display .closebtn:hover {
+  color: #ffffff;
+  background-color: #5f5f5f;
+}
+
+.plot-display .openbtn:hover {
+  color: #f1f1f1;
+  background-color: #383838;
+}
+
+.nav-btn {
+  position: absolute;
+  z-index: 1;
+  top: 0.5%;
+  left: 0.25%;
+  margin: auto;
+  color: white;
+  width: 25px;
+  height: 25px;
+  visibility: none;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidenav-title {
+  color: white;
+  position: absolute;
+  top: 2%;
+  left: 3%;
+  z-index: 2;
+  margin-bottom: auto;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+  background-color: #383838;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 1%;
+  font-size: 30px;
+  color: #818181;
+}
+
+.sidenav .closebtn:hover {
+  color: #f1f1f1;
+  background-color: #383838;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-height: 800px) {
+  .plot-display {
+    position: absolute;
+    z-index: 10;
+    bottom: 5%;
+    right: 0%;
+    height: 0px;
+    width: 0px;
+    margin: auto;
+  }
+
+  .img-logo {
+    max-width: 50%;
+    max-height: 50%;
+  }
+
+  .img-logo-container {
+    position: absolute;
+    z-index: 1;
+    right: 15%;
+    top: 2%;
+    height: 200px;
+    width: 300px;
+  }
+
+  .text-logo-container {
+    position: absolute;
+    color: white;
+    z-index: 1;
+    right: 1%;
+    top: 1%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+  }
 }
