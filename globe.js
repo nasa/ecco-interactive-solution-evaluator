@@ -82,6 +82,12 @@ function originalGraph() {
   };
   plotData = [trace1, trace2];
   layout = {
+    showlegend: true,
+    legend: {
+      orientation: "h",
+      traceorder: "normal",
+      y: -0.25,
+    },
     title: {
       text: dataset + " " + bin_id,
       font: {
@@ -161,7 +167,7 @@ function subtractGraph(dataArray) {
   let subtractTrace = {
     type: "scatter",
     mode: "lines",
-    name: "Subtract" + " " + measurement,
+    name: "Subtract" + " " + plotData[0].name,
     x: date,
     y: [],
     line: { color: "#17BECF" },
