@@ -13,4 +13,4 @@ for i in range(1):
     dictA = {'Cost': a_list}
 
     dfA = pd.DataFrame(dictA)
-    dfA.to_csv(r'../stats/Sea Surface Temperature/GHRSST 0.25deg daily/Cost.csv',index=False)
+    dfA.to_csv(r'../stats/Sea Surface Salinity/Annual SSS/Cost.csv',index=False)

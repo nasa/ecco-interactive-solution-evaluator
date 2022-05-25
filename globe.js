@@ -18,15 +18,15 @@ let category = "Sea Surface Temperature";
 //   }
 // );
 
-function retrieveCategory(currCategory, currDataset, currBin_id) {
-  category = currCategory;
-  retrieveCSV(currDataset, currBin_id);
-}
+// function retrieveCategory(currCategory, currDataset, currBin_id) {
+//   category = currCategory;
+//   retrieveCSV(currDataset, currBin_id);
+// }
 
-async function retrieveCostCSV() {
+async function retrieveCostCSV(currCategory, currDataset) {
   let cost = [];
   const costData = await d3.csv(
-    "./stats/" + category + "/" + dataset + "/Cost.csv"
+    "./stats/" + currCategory + "/" + currDataset + "/Cost.csv"
   );
   for (let i = 0; i < costData.length; i++) {
     cost.push(costData[i].Cost);
@@ -35,9 +35,12 @@ async function retrieveCostCSV() {
 }
 
 async function retrieveCSV(currCategory, currDataset, currBin_id) {
+  if (currDataset != dataset) {
+    retrieveCostCSV(currCategory, currDataset);
+  }
   category = currCategory;
   if (currBin_id == -1) {
-    alert("Please select a bin");
+    alert("Please select a geodesic cell");
     dataset = currDataset;
   } else if (currDataset == "") {
     alert("Please select a dataset");
@@ -221,7 +224,7 @@ function squareGraph(originalTraces) {
 
 //function to provide color mapping
 function colorMap(bin_id, cost) {
-  //TODO: fix retrieve category function (combine), call the globe render function upon dataset click, fix UI to show default dataset, add dropdown bars for model traces and type of cost
+  //TODO: call the globe render function upon dataset click, fix UI to show default dataset, add dropdown bars for model traces and type of cost, fix jquery duplicate drawer creation
   maxValue = Math.max(...cost);
   colorScale = Math.abs(cost[bin_id]) / maxValue;
   colorMapRGB = evaluate_cmap(colorScale, "OrRd", false);
@@ -272,4 +275,4 @@ async function globeRender(cost) {
     point.__threeObj.material.color.g = 0;
   }
 }
-retrieveCostCSV();
+retrieveCostCSV(category, dataset);
