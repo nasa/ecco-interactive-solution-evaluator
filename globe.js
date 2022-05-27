@@ -8,9 +8,8 @@ let A = [];
 let B = [];
 let measurement = "";
 let bin_id = -1;
-let dataset = "";
-let category = "";
-
+let dataset = "GHRSST 0.25deg daily";
+let category = "Sea Surface Temperature";
 //Retreiving APPL Stock CSV to load the graphs
 // d3.csv(
 //   "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
@@ -19,13 +18,29 @@ let category = "";
 //   }
 // );
 
-function retrieveCategory(currCategory) {
-  category = currCategory;
+// function retrieveCategory(currCategory, currDataset, currBin_id) {
+//   category = currCategory;
+//   retrieveCSV(currDataset, currBin_id);
+// }
+
+async function retrieveCostCSV(currCategory, currDataset) {
+  let cost = [];
+  const costData = await d3.csv(
+    "./stats/" + currCategory + "/" + currDataset + "/Cost.csv"
+  );
+  for (let i = 0; i < costData.length; i++) {
+    cost.push(costData[i].Cost);
+  }
+  globeRender(cost);
 }
 
-async function retrieveCSV(currDataset, currBin_id) {
+async function retrieveCSV(currCategory, currDataset, currBin_id) {
+  if (currDataset != dataset) {
+    retrieveCostCSV(currCategory, currDataset);
+  }
+  category = currCategory;
   if (currBin_id == -1) {
-    alert("Please select a bin");
+    alert("Please select a geodesic cell");
     dataset = currDataset;
   } else if (currDataset == "") {
     alert("Please select a dataset");
@@ -167,7 +182,7 @@ function subtractGraph(dataArray) {
   let subtractTrace = {
     type: "scatter",
     mode: "lines",
-    name: "Subtract" + " " + plotData[0].name,
+    name: "Subtract" + " " + plotData[0].name.replace("Model", "Trace"),
     x: date,
     y: [],
     line: { color: "#17BECF" },
@@ -208,10 +223,11 @@ function squareGraph(originalTraces) {
 }
 
 //function to provide color mapping
-function colorMap(longitude) {
-  colorScale = Math.abs(longitude) / 90;
-  colorMapRGB = evaluate_cmap(colorScale, "PuBu", false);
-
+function colorMap(bin_id, cost) {
+  //TODO: call the globe render function upon dataset click, fix UI to show default dataset, add dropdown bars for model traces and type of cost, fix jquery duplicate drawer creation
+  maxValue = Math.max(...cost);
+  colorScale = Math.abs(cost[bin_id]) / maxValue;
+  colorMapRGB = evaluate_cmap(colorScale, "OrRd", false);
   return rgbToHex(colorMapRGB[0], colorMapRGB[1], colorMapRGB[2]);
 }
 
@@ -224,7 +240,7 @@ function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
-(async function () {
+async function globeRender(cost) {
   // Main code to fetch the json and transcribe it to points and interative features
   const points = await fetch("./points-data/geo_bins_642.json");
   const oceans = await points.json();
@@ -246,11 +262,11 @@ function rgbToHex(r, g, b) {
     .pointLat((d) => d.geometry.coordinates[1])
     .pointLng((d) => d.geometry.coordinates[0])
     .pointLabel((d) => `${d.properties.bin_id}`)
-    .pointColor((d) => colorMap(d.geometry.coordinates[1]))
+    .pointColor((d) => colorMap(d.properties.bin_id, cost))
     .pointAltitude(0.001)
     .pointRadius(1)
     // .onPointClick(emitColor);
-    .onPointClick((d) => retrieveCSV(dataset, d.properties.bin_id));
+    .onPointClick((d) => retrieveCSV(category, dataset, d.properties.bin_id));
 
   function emitColor(point, event, { lat, lng, altitude }) {
     console.log(point);
@@ -258,4 +274,5 @@ function rgbToHex(r, g, b) {
     point.__threeObj.material.color.b = 0;
     point.__threeObj.material.color.g = 0;
   }
-})();
+}
+retrieveCostCSV(category, dataset);

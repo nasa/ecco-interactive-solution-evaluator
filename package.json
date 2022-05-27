@@ -10,6 +10,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "npx snowpack dev",
+    "build": "npx snowpack build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/jtroberts/ecco-interactive-solution-evaluator/issues"
   },
-  "homepage": "https://github.com/jtroberts/ecco-interactive-solution-evaluator#readme"
+  "homepage": "https://github.com/jtroberts/ecco-interactive-solution-evaluator#readme",
+  "devDependencies": {}
 }

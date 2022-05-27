@@ -96,15 +96,11 @@ body {
   left: 0;
   background-color: #111; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
 .sidenav-title {
   color: white;
-  position: absolute;
-  top: 2%;
-  left: 3%;
   z-index: 2;
   margin-bottom: auto;
 }
