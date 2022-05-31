@@ -48,7 +48,6 @@
 
 function createDatasetDrawer(payload) {
   const data = JSON.parse(payload.slice(0, -1));
-  console.log(data.parameter_longName);
   $(document).ready(function () {
     let drawer = $("#plotNav");
     let datasetId = data.parameter_longName.replaceAll(" ", "-");
@@ -66,7 +65,6 @@ function createDatasetDrawer(payload) {
       )
       .after(
         data.category.forEach((dataset) => {
-          console.log(data.parameter_longName);
           $(`#${datasetId}`).append(
             $("<a></a>")
               .text(dataset.dataset_shortTitle)
@@ -78,6 +76,13 @@ function createDatasetDrawer(payload) {
         })
       )
       .after(openNav(`${datasetId}`));
+    //for each function to remove dataset category div duplicates
+    $(`#${datasetId}`).each(function () {
+      let $ids = $("[id=" + this.id + "]");
+      if ($ids.length > 1) {
+        $ids.not(":first").remove();
+      }
+    });
   });
 }
 
