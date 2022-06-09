@@ -1,7 +1,4 @@
 (async function () {
-  const response = await fetch("./datasets/config.json");
-  const food = await response.json();
-
   $(document).ready(function () {
     let drawer = $("#plotNav");
     drawer.empty();
@@ -12,27 +9,6 @@
     );
 
     datasets = {};
-    // $.getJSON("./datasets/config.json", function (data) {
-    //   $.each(data, function (key, entry) {
-    //     drawer.append(
-    //       $("<a></a>")
-    //         .attr("onclick", `openNav('${entry.parameter_longName}')`)
-    //         .text(entry.parameter_longName)
-    //     );
-
-    //     drawer.after(
-    //       $("<div></div>")
-    //         .attr({
-    //           id: `${entry.parameter_longName}`,
-    //           class: "sidenav",
-    //         })
-    //         .append(`<h2 class="sidenav-title">${entry.parameter_longName}</h2>`)
-    //         .append(
-    //           `<ion-icon name="close-outline" class="closebtn" onclick="closeNav('${entry.parameter_longName}')"></ion-icon>`
-    //         )
-    //     );
-    //   });
-    // });
 
     $.getJSON("./datasets/config.json", function (data) {
       $.each(data, function (key, entry) {
@@ -42,9 +18,47 @@
             .text(entry.parameter_longName)
         );
       });
+      createDefaultDrawer(data);
     });
   });
 })();
+
+function createDefaultDrawer(data) {
+  defaultData = data[0];
+  $(document).ready(function () {
+    let drawer = $("#plotNav");
+    let datasetId = defaultData.parameter_longName.replaceAll(" ", "-");
+    drawer
+      .after(
+        $("<div></div>")
+          .attr({
+            id: datasetId,
+            class: "sidenav",
+          })
+          .append(
+            `<h2 class="sidenav-title">${defaultData.parameter_longName}</h2>`
+          )
+          .append(
+            `<ion-icon name="close-outline" class="closebtn" onclick="closeNav('${datasetId}')"></ion-icon>`
+          )
+      )
+      .after(
+        defaultData.category.forEach((dataset) => {
+          $(`#${datasetId}`).append(
+            $("<a></a>")
+              .text(dataset.dataset_shortTitle)
+              .attr(
+                "onclick",
+                `retrieveCSV('${defaultData.parameter_longName}','${dataset.dataset_shortTitle}')`
+              )
+          );
+        })
+      )
+      .after(openNav(`${datasetId}`));
+    let firstDataset = defaultData.category[0].dataset_shortTitle;
+    setDefault(defaultData.parameter_longName, firstDataset);
+  });
+}
 
 function createDatasetDrawer(payload) {
   const data = JSON.parse(payload.slice(0, -1));
@@ -70,7 +84,7 @@ function createDatasetDrawer(payload) {
               .text(dataset.dataset_shortTitle)
               .attr(
                 "onclick",
-                `retrieveCSV('${data.parameter_longName}','${dataset.dataset_shortTitle}','${bin_id}')`
+                `retrieveCSV('${data.parameter_longName}','${dataset.dataset_shortTitle}')`
               )
           );
         })
