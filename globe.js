@@ -10,18 +10,11 @@ let measurement = "";
 let bin_id = -1;
 let dataset = "GHRSST 0.25deg daily";
 let category = "Sea Surface Temperature";
-//Retreiving APPL Stock CSV to load the graphs
-// d3.csv(
-//   "https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv",
-//   function (data) {
-//     date.push(data.Date);
-//   }
-// );
 
-// function retrieveCategory(currCategory, currDataset, currBin_id) {
-//   category = currCategory;
-//   retrieveCSV(currDataset, currBin_id);
-// }
+function retrieveBinId(currBin_id) {
+  bin_id = currBin_id;
+  retrieveCSV(category, dataset);
+}
 
 async function retrieveCostCSV(currCategory, currDataset) {
   let cost = [];
@@ -34,21 +27,15 @@ async function retrieveCostCSV(currCategory, currDataset) {
   globeRender(cost);
 }
 
-async function retrieveCSV(currCategory, currDataset, currBin_id) {
+async function retrieveCSV(currCategory, currDataset) {
   if (currDataset != dataset) {
     retrieveCostCSV(currCategory, currDataset);
   }
   category = currCategory;
-  if (currBin_id == -1) {
+  dataset = currDataset;
+  if (bin_id == -1) {
     alert("Please select a geodesic cell");
-    dataset = currDataset;
-  } else if (currDataset == "") {
-    alert("Please select a dataset");
-    bin_id = currBin_id;
-  } else if (currBin_id != -1 && currDataset != "") {
-    bin_id = currBin_id;
-    dataset = currDataset;
-
+  } else {
     A = [];
     B = [];
     date = [];
@@ -73,7 +60,10 @@ async function retrieveCSV(currCategory, currDataset, currBin_id) {
     originalGraph();
   }
 }
-
+function setDefault(currCategory, currDataset) {
+  dataset = currDataset;
+  category = currCategory;
+}
 //Retrieves original graph
 function originalGraph() {
   trace1 = {
@@ -248,16 +238,6 @@ async function globeRender(cost) {
   const ref = document.getElementById("globeViz");
   world(ref)
     .globeImageUrl("./assets/earth.png")
-    // .hexBinPointsData(oceans.features)
-    // .hexBinPointLat((d) => d.geometry.coordinates[1])
-    // .hexBinPointLng((d) => d.geometry.coordinates[0])
-    // .hexAltitude(0.001)
-    // .hexBinResolution(3)
-    // .hexMargin(0.1)
-    // .hexTopColor((d) => colorMap(d.points[0].geometry.coordinates[1]))
-    // .hexSideColor(() => "#00000")
-    // .hexLabel((d) => `${d.points[0].properties.bin_id}`)
-    // .onHexClick((d) => retrieveCSV(d.points[0].properties.bin_id));
     .pointsData(oceans.features)
     .pointLat((d) => d.geometry.coordinates[1])
     .pointLng((d) => d.geometry.coordinates[0])
@@ -265,14 +245,6 @@ async function globeRender(cost) {
     .pointColor((d) => colorMap(d.properties.bin_id, cost))
     .pointAltitude(0.001)
     .pointRadius(1)
-    // .onPointClick(emitColor);
-    .onPointClick((d) => retrieveCSV(category, dataset, d.properties.bin_id));
-
-  function emitColor(point, event, { lat, lng, altitude }) {
-    console.log(point);
-    point.__threeObj.material.color.r = 0;
-    point.__threeObj.material.color.b = 0;
-    point.__threeObj.material.color.g = 0;
-  }
+    .onPointClick((d) => retrieveBinId(d.properties.bin_id));
 }
 retrieveCostCSV(category, dataset);
