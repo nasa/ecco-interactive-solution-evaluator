@@ -4,6 +4,7 @@
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <link rel='stylesheet' href='styles.css'>
+  <!-- Imports -->
   <script src="//unpkg.com/globe.gl"></script>
   <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -15,6 +16,7 @@
   <script async src='./index.js'></script>
 </head>
 <body>
+  <!-- Header -->
   <div>
     <div id="imgLogo" class="img-logo-container">
       <img src="assets/Tribrand_Logo.png" class="img-logo">
@@ -24,22 +26,10 @@
     </div>
   </div>
   <div id="plotNav" class="sidenav">
-    <!-- <h2 class="sidenav-title">Data</h2>
-    <ion-icon name="close-outline" class="closebtn" onclick="closeNav('plotNav')"></ion-icon> -->
-    <!-- <a href="#" onclick="openNav('tempNav'); retrieveCategory('Temperature')">Ocean Temperature</a>
-    <a href="#">Salinity</a>
-    <a href="#">Sea Ice Velocity</a>
-    <a href="#">Surface Atmosphere</a> -->
   </div>
-  
-  <!-- <div id="Sea Surface Temperature" class="sidenav">
-    <h2 class="sidenav-title">Ocean Temperature</h2>
-    <ion-icon name="close-outline" class="closebtn" onclick="closeNav('tempNav')"></ion-icon>
-    <a href="#" onclick="retrieveCSV('Temperature1', bin_id)">Temperature1</a>
-    <a href="#" onclick="retrieveCSV('Temperature2', bin_id)">Temperature2</a>
-  </div> -->
-
+  <!-- Plot Div -->
   <ion-icon name="list-outline" onclick='openNav("plotNav")' class='nav-btn' id="navButton"></ion-icon>
+  <!-- Globe display -->
   <div id="globeViz"></div>
   <div id="plot-container">
     <div id="plotGraph" class="plot-display">

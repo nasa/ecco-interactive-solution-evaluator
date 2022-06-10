@@ -1,4 +1,6 @@
 //Global Variable Creation
+
+//Variables to contain the overall traces, dates, individual traces, plot layout, y-axis trace values
 let plotData = [];
 let date = [];
 let trace1 = {};
@@ -6,16 +8,19 @@ let trace2 = {};
 let layout = {};
 let A = [];
 let B = [];
+//Variables to set what we are measuring, the bin_id, the default dataset, and the default category
 let measurement = "";
 let bin_id = -1;
 let dataset = "GHRSST 0.25deg daily";
 let category = "Sea Surface Temperature";
 
+//Function to retrieve what bin the user clicked
 function retrieveBinId(currBin_id) {
   bin_id = currBin_id;
   retrieveCSV(category, dataset);
 }
 
+//function to retrieve the Cost CSV file and send it to globeRender function
 async function retrieveCostCSV(currCategory, currDataset) {
   let cost = [];
   const costData = await d3.csv(
@@ -27,15 +32,20 @@ async function retrieveCostCSV(currCategory, currDataset) {
   globeRender(cost);
 }
 
+//Function to retrieve the plot CSV
 async function retrieveCSV(currCategory, currDataset) {
+  //If the user selected a different dataset then we should rerender the globe and repopulate the bin colors
   if (currDataset != dataset) {
     retrieveCostCSV(currCategory, currDataset);
   }
+  //Setting the global variables based on what the user clicked
   category = currCategory;
   dataset = currDataset;
+  //If a user has not selected a bin, prompt them to do so
   if (bin_id == -1) {
     alert("Please select a geodesic cell");
   } else {
+    //Setting up plotly plot and populate the plot
     A = [];
     B = [];
     date = [];
@@ -57,15 +67,18 @@ async function retrieveCSV(currCategory, currDataset) {
       B.push(dataB[i][measurement]);
       date.push(dataA[i].Time);
     }
+    //Create a graph to display
     originalGraph();
   }
 }
+//Sets Default Variables upon beginning
 function setDefault(currCategory, currDataset) {
   dataset = currDataset;
   category = currCategory;
 }
 //Retrieves original graph
 function originalGraph() {
+  //Plotly setup. Familarize yourself with plotly
   trace1 = {
     type: "scatter",
     mode: "lines",
@@ -86,6 +99,7 @@ function originalGraph() {
     line: { color: "#7F7F7F" },
   };
   plotData = [trace1, trace2];
+  //Layout setup
   layout = {
     showlegend: true,
     legend: {
@@ -226,10 +240,11 @@ function componentToHex(c) {
   return hex.length == 1 ? "0" + hex : hex;
 }
 
+//Function to convert RGB to Hex for Globe.gl
 function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
-
+//Function to render/display the globe
 async function globeRender(cost) {
   // Main code to fetch the json and transcribe it to points and interative features
   const points = await fetch("./points-data/geo_bins_642.json");
@@ -247,4 +262,5 @@ async function globeRender(cost) {
     .pointRadius(1)
     .onPointClick((d) => retrieveBinId(d.properties.bin_id));
 }
+//Called once to default render the globe. It is called upon a dataset change or cost change
 retrieveCostCSV(category, dataset);

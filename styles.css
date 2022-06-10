@@ -2,7 +2,7 @@
 body {
   margin: 0;
 }
-
+/* Logo Image Style */
 .img-logo {
   max-width: 50%;
   max-height: 50%;
@@ -17,6 +17,7 @@ body {
   width: 400px;
 }
 
+/* Logo Text Style */
 .text-logo-container {
   position: absolute;
   color: white;
@@ -27,6 +28,7 @@ body {
   font-size: 10px;
 }
 
+/* Plot Display Style */
 .plot-display {
   position: absolute;
   z-index: 10;
@@ -117,11 +119,6 @@ body {
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-  color: #f1f1f1;
-  background-color: #383838;
-}
-
-.sidenav a:active {
   color: #f1f1f1;
   background-color: #383838;
 }
