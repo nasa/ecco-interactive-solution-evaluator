@@ -7,7 +7,11 @@ This tool is utilized to help ocean scientist analyze and evaluate oceanic data 
 
 ## Setup
 - Clone and Pull Github Repo
-- Type `npm i` in the terminal to pull all the necessary dependecies
+- Install Node.js:https://nodejs.org/en/
+- The Node version utilized is `v16.13.1` (You can type node -v in your terminal to see what version you have)
+- If you use NVM you can type `nvm install 16.13.1`
+- IMPORTANT: Make sure to have the exact version of Node
+- Type `npm install` in the terminal to pull all the necessary dependecies
 - Note: Most of the libraries and dependecies are utilizing the script tag and are client side
 - Type `npm start` to run a localhost version of the application
 
