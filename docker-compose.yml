@@ -1,0 +1,11 @@
+version: "3"
+services:
+  ecco-interactive-solution-evaluator:
+    image: nasa/ecco-interactive-solution-evaluator
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - ./graph-data:/ecco/graph-data
+      - ./stats:/ecco/stats
