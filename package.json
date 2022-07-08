@@ -19,7 +19,7 @@
     "url": "git+https://github.com/jtroberts/ecco-interactive-solution-evaluator.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/jtroberts/ecco-interactive-solution-evaluator/issues"
   },
