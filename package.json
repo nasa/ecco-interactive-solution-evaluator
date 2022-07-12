@@ -16,13 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jtroberts/ecco-interactive-solution-evaluator.git"
+    "url": "git+https://github.com/nasa/ecco-interactive-solution-evaluator.git"
   },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/jtroberts/ecco-interactive-solution-evaluator/issues"
+    "url": "https://github.com/nasa/ecco-interactive-solution-evaluator/issues"
   },
-  "homepage": "https://github.com/jtroberts/ecco-interactive-solution-evaluator#readme",
+  "homepage": "https://github.com/nasa/ecco-interactive-solution-evaluator#readme",
   "devDependencies": {}
 }
